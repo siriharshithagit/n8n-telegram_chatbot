@@ -1,0 +1,136 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -208,
+        -64
+      ],
+      "id": "6d79a643-6af7-4260-87ca-0d862e54e00a",
+      "name": "Telegram Trigger",
+      "webhookId": "782899bb-388c-4200-b66d-0b86a35d5148",
+      "credentials": {
+        "telegramApi": {
+          "id": "wyuec7wxswcguQfm",
+          "name": "Harshbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant\ngood one"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        -64
+      ],
+      "id": "d96002eb-75bd-4a13-a9e7-acefacf129e8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        112
+      ],
+      "id": "72fcc457-6966-49a8-8f4d-4b7dd5fb23fc",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "b4t56qrIphySfY8R",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "= {{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        -64
+      ],
+      "id": "a2f2a9d1-10fb-45f0-9511-ab8ea3f6db0a",
+      "name": "Send a text message",
+      "webhookId": "33161c50-2509-4094-9de5-801bfb1a321c",
+      "credentials": {
+        "telegramApi": {
+          "id": "wyuec7wxswcguQfm",
+          "name": "Harshbot"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e73c39c9-f0a9-45fc-802b-42769218a970",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0d0a0832743e0bf624d54cb7aba56e6adbe6d3db9b37e8735fe7b1a68eff4f3d"
+  },
+  "id": "frTsgY1qWTjkUMAW",
+  "tags": []
+}
