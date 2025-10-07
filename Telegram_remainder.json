@@ -1,0 +1,144 @@
+{
+  "name": "Tele remainder",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0e7dc8b0-4d9c-4a70-a6ca-42a1eb6de1a7",
+      "name": "Telegram Trigger",
+      "webhookId": "253f87a3-cb21-4f36-82e2-d59d6a683644",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "dX13O2u7IWfMoqt2",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let message = \"✨ *Your Daily Schedule* ✨\\n\\n\";\n\nif (items.length === 0) {\n  message += \"📭 *No events scheduled for today.*\\n\";\n  message += \"🌞 Enjoy your day and stay productive! 💪\\n\";\n} else {\n  for (const item of items) {\n    const event = item.json;\n\n    const summary = event.summary?.trim() || \"Untitled Event\";\n    const location = event.location?.trim() || \"Venue not specified\";\n    const start = event.start?.dateTime || event.start?.date;\n    const end = event.end?.dateTime || event.end?.date;\n\n    // Convert to local time (GMT+5:30)\n    const startDate = new Date(start);\n    const endDate = new Date(end);\n\n    let dateLine = \"📅 Date not specified\";\n    let timeLine = \"⏰ Time not specified\";\n\n    if (!isNaN(startDate) && !isNaN(endDate)) {\n      const offsetMs = (5 * 60 + 30) * 60 * 1000;\n      const localStart = new Date(startDate.getTime() + offsetMs);\n      const localEnd = new Date(endDate.getTime() + offsetMs);\n\n      const dateFormat = (d) =>\n        d.toLocaleDateString('en-IN', {\n          day: '2-digit',\n          month: 'short',\n          year: 'numeric',\n        });\n\n      const timeFormat = (d) =>\n        d.toLocaleTimeString('en-IN', {\n          hour: '2-digit',\n          minute: '2-digit',\n          hour12: true,\n        });\n\n      dateLine = `📅 ${dateFormat(localStart)}`;\n      timeLine = `⏰ ${timeFormat(localStart)} → ${timeFormat(localEnd)}`;\n    }\n\n    // Add emojis based on keywords\n    let icon = \"🟢\"; // default\n    const lowerSummary = summary.toLowerCase();\n    if (lowerSummary.includes(\"meeting\") || lowerSummary.includes(\"call\")) icon = \"📞\";\n    else if (lowerSummary.includes(\"birthday\") || lowerSummary.includes(\"party\")) icon = \"🎉\";\n    else if (lowerSummary.includes(\"study\") || lowerSummary.includes(\"class\")) icon = \"📚\";\n    else if (lowerSummary.includes(\"workout\") || lowerSummary.includes(\"exercise\")) icon = \"💪\";\n\n    // Build event block\n    message += `*${icon}  ${summary}*\\n`;\n    message += `   ${dateLine}\\n`;\n    message += `   ${timeLine}\\n`;\n    message += `   📍 ${location}\\n`;\n    message += `────────────────────────\\n`;\n  }\n}\n\n// Motivational quotes array\nconst quotes = [\n  \"💡 \\\"The secret of getting ahead is getting started.\\\" – Mark Twain\",\n  \"🚀 \\\"Don’t watch the clock; do what it does. Keep going.\\\" – Sam Levenson\",\n  \"🌟 \\\"Success is not final, failure is not fatal: It is the courage to continue that counts.\\\" – Winston Churchill\",\n  \"💪 \\\"Believe you can and you're halfway there.\\\" – Theodore Roosevelt\",\n  \"✨ \\\"Your limitation—it’s only your imagination.\\\"\"\n];\n\n// Pick a random quote\nconst randomQuote = quotes[Math.floor(Math.random() * quotes.length)];\n\n// Append quote only\nmessage += `\\n💌 *Daily Motivation:*\\n${randomQuote}`;\n\nreturn [{ json: { text: message } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e0c8a9cd-3390-48f1-86a9-8a6f6d5e8971",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "chatId": "6674161847",
+        "text": "={{ $json.text }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "f11888db-01b2-4024-9890-2838fa195f00",
+      "name": "Send a text message",
+      "webhookId": "3d3e7231-c8bb-4ca4-9f85-c1a3398d3574",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "dX13O2u7IWfMoqt2",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "siriharshithareddy@gmail.com"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e50bb210-5a90-4b1e-9ee4-e9ae0f085614",
+      "name": "Get many events",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NEXB817fU9L1I0AL",
+          "name": "Google Calendar account 5"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5b09f616-3918-4901-b024-d3b119618b3f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b166dde46a8fb983d97fa1b44dd5f465a75cde864183c54e6563b26315218f90"
+  },
+  "id": "DmTKp9GqvEKwMj4H",
+  "tags": []
+}
