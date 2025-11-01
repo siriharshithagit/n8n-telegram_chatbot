@@ -79,3 +79,5 @@ You can update or add new rows anytime — no workflow changes required.
 5. Activate the workflow — emails will send automatically 📨
 
 ---
+##PPT Link
+https://docs.google.com/presentation/d/1Rg4c9tpFSLCdx3rYKBndUqs4TFNw6MEJ/edit?usp=drivesdk&ouid=115803794330173249605&rtpof=true&sd=true
