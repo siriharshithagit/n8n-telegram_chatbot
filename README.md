@@ -38,6 +38,8 @@ There is a need for a system that **automatically delivers the schedule** to a u
 3. Google Calendar events for the day are fetched.
 4. The schedule is formatted (converted to IST + structured cleanly).
 5. A Telegram Bot sends the final schedule back to the user.
+<img width="1721" height="780" alt="image" src="https://github.com/user-attachments/assets/502d2a43-05a3-456e-8d33-afe12c499049" />
+
 
 ---
 
