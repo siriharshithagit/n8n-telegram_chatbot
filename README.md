@@ -43,6 +43,9 @@ There is a need for a system that **automatically delivers the schedule** to a u
 
 ---
 
+![WhatsApp Image 2025-11-01 at 12 46 20_54dca140](https://github.com/user-attachments/assets/4907a5b3-0fe6-4ef9-be72-f4499f11bef3)
+
+
 🔮 Future Scope
 - Auto-send schedule daily at a fixed time (e.g., 7 AM).
 - Reminders before each event.
