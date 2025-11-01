@@ -1,21 +1,20 @@
-# 📅 Telegram Daily Schedule Bot using n8n & Google Calendar
+# 📧 Automated Email Sender using n8n + Google Sheets + Schedule Trigger
 
-This project automates the process of fetching daily schedule events from **Google Calendar** and sending them to a **Telegram Bot** using an **n8n workflow**.  
-It helps users stay organized by providing instant reminders in a platform they use every day.
+This project automates the process of sending emails to multiple recipients based on data stored in **Google Sheets**.  
+The workflow uses **n8n** to read each row from the sheet and sends an email to the respective person **automatically at a scheduled time**.
 
 ---
 
-## 🚀 Problem Statement
-Many students and professionals rely on digital calendars to manage their schedules. However, they often **forget to check** the calendar regularly which leads to missed classes, meetings, or deadlines.  
-There is a need for a system that **automatically delivers the schedule** to a user in a convenient and frequently-used platform like **Telegram**.
+## 🧠 Problem Statement
+Sending emails manually to many people is time-consuming and often leads to delays or missed communication.  
+There is a need for a **simple automated system** that reads recipient details from a spreadsheet and sends emails automatically on time.
 
 ---
 
 ## 🎯 Objective
-- Automatically retrieve daily schedule from Google Calendar.
-- Format and send the schedule message to a Telegram chat.
-- Improve time management and productivity.
-- Reduce manual checking and dependency on memory.
+- Store recipient email details and message content in Google Sheets.
+- Automatically send emails using a schedule trigger.
+- Ensure timely and consistent communication without manual effort.
 
 ---
 
@@ -23,42 +22,60 @@ There is a need for a system that **automatically delivers the schedule** to a u
 
 | Tool / Service | Purpose |
 |----------------|---------|
-| **n8n**        | Workflow automation platform to connect services. |
-| **Google Calendar API** | Source of events and schedule data. |
-| **Telegram Bot** | Sends formatted message to the user on Telegram. |
-| **Webhook / Trigger Node** | Initiates the workflow based on user command. |
+| **n8n** | Automation workflow platform |
+| **Google Sheets** | Stores recipient emails and message details |
+| **Schedule Trigger (Cron)** | Runs workflow at the specified time |
+| **Email / Gmail Node** | Sends emails to the recipients |
+
+---
+
+## 🧱 Google Sheets Structure
+
+Example format:
+
+| Name | Email Address | Message | Send Time |
+|------|---------------|---------|-----------|
+| Rahul | rahul@gmail.com | Meeting today at 4 PM | 10:00 |
+| Sneha | sneha@gmail.com | Submit assignment today | 10:00 |
+
+You can update or add new rows anytime — no workflow changes required.
 
 ---
 
 ## 🔁 Workflow Overview
 
-**Explanation:**
-1. The user sends a trigger command in Telegram.
-2. n8n receives the command through a **Webhook**.
-3. Google Calendar events for the day are fetched.
-4. The schedule is formatted (converted to IST + structured cleanly).
-5. A Telegram Bot sends the final schedule back to the user.
 
-<img width="1721" height="780" alt="Screenshot 2025-11-01 122645" src="https://github.com/user-attachments/assets/42295794-453b-4291-93f1-cf6d2eedcba3" />
-
-<img width="678" height="493" alt="image" src="https://github.com/user-attachments/assets/aae1dd16-fce7-4f02-abec-c20dcc7d8730" />
+<img width="1767" height="832" alt="Screenshot 2025-11-01 142144" src="https://github.com/user-attachments/assets/61dad9cf-fad3-4113-bf83-d92db5f9c4d2" />
 
 
+<img width="570" height="123" alt="image" src="https://github.com/user-attachments/assets/8e045f7c-0fd0-4665-9e91-f0d0103c217e" />
 
+
+![WhatsApp Image 2025-11-01 at 14 19 02_7f7f4671](https://github.com/user-attachments/assets/ef245c84-3be5-40f9-97e9-22d5061ed3da)
+
+### ✅ Advantages
+- Fully automated email sending
+- Easy to maintain (just edit Google Sheet)
+- No coding required
+- Works for unlimited recipients
+- Ensures timely communication
 
 ---
 
-![WhatsApp Image 2025-11-01 at 12 46 20_54dca140](https://github.com/user-attachments/assets/4907a5b3-0fe6-4ef9-be72-f4499f11bef3)
+### 🔮 Future Scope
+- Send reminders before deadlines
+- Send scheduled WhatsApp or SMS alerts
+- Add conditions (e.g., send only if Send Time matches current time)
+- Log sent emails into another sheet
 
+---
 
-🔮 Future Scope
-- Auto-send schedule daily at a fixed time (e.g., 7 AM).
-- Reminders before each event.
-- Weekly or monthly schedule summaries.
-- Multi-user support with authentication.
-- Integration with WhatsApp, Slack, Discord, etc.
-- Smart priority tagging for important events.
+## ▶️ How to Use
 
+1. Create a Google Sheet with the required columns.
+2. Connect Google Sheets and Email credentials in n8n.
+3. Import the workflow file:
+4. Set the **Schedule Trigger** time (e.g., daily at 10 AM).
+5. Activate the workflow — emails will send automatically 📨
 
-ppt link
-https://docs.google.com/presentation/d/1C-5IA2C07I_M6Ds0wa3OHbmw5JTEuxSY/edit?usp=drivesdk&ouid=115803794330173249605&rtpof=true&sd=true
+---
