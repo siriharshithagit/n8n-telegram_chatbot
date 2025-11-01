@@ -55,4 +55,5 @@ There is a need for a system that **automatically delivers the schedule** to a u
 - Smart priority tagging for important events.
 
 
-
+ppt link
+https://docs.google.com/presentation/d/1C-5IA2C07I_M6Ds0wa3OHbmw5JTEuxSY/edit?usp=drivesdk&ouid=115803794330173249605&rtpof=true&sd=true
