@@ -45,7 +45,8 @@ You can update or add new rows anytime — no workflow changes required.
 ## 🔁 Workflow Overview
 
 
-<img width="1767" height="832" alt="Screenshot 2025-11-01 142144" src="https://github.com/user-attachments/assets/61dad9cf-fad3-4113-bf83-d92db5f9c4d2" />
+<img width="1826" height="815" alt="image" src="https://github.com/user-attachments/assets/fc7a63c4-6102-4270-9de9-d92eb395a885" />
+
 
 
 <img width="570" height="123" alt="image" src="https://github.com/user-attachments/assets/8e045f7c-0fd0-4665-9e91-f0d0103c217e" />
