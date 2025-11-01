@@ -1,0 +1,177 @@
+{
+  "name": "Google Sheets Auto Reminder Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 16,
+              "triggerAtMinute": 16
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        16
+      ],
+      "id": "ca2e5cf8-fe47-499d-9716-83d842c17e99",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1YwYRcSZY-UzEptpoOmlNamFiSWmiI-n2ER-dIH7JItc",
+          "mode": "list",
+          "cachedResultName": "faculty",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YwYRcSZY-UzEptpoOmlNamFiSWmiI-n2ER-dIH7JItc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YwYRcSZY-UzEptpoOmlNamFiSWmiI-n2ER-dIH7JItc/edit#gid=0"
+        },
+        "combineFilters": "OR",
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "detectAutomatically"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -528,
+        16
+      ],
+      "id": "741f52b2-9fc5-4c65-a8c6-6fa74b6c6de1",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3uNafczdPsIPkUJ6",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const sendTimeStr = item.json.SendTime; // \"2025-10-19 10:40\"\n  const isoString = sendTimeStr.replace(\" \", \"T\") + \":00\";\n  const originalTime = new Date(isoString);\n  const adjustedTime = new Date(originalTime.getTime() - 5*60*1000);\n  item.json.sendTime = adjustedTime.toISOString();\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        32
+      ],
+      "id": "3a597791-4b3b-4c05-a41e-0c452db61b06",
+      "name": "Calculate sendTime"
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{$json[\"SendTime\"]}}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        32
+      ],
+      "id": "ec1f8291-abda-4d58-9f24-304abd64025e",
+      "name": "Wait",
+      "webhookId": "5a1969ad-1edf-4685-b975-cd6fc245e205"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"email\"]}}",
+        "subject": "=📘 Class Reminder - {{$json[\"Subject\"]}}\n\n\n",
+        "message": "=<div style=\"font-family: 'Segoe UI', sans-serif; color: #333; padding: 16px; line-height: 1.6;\">\n\n  <h2 style=\"color: #4A90E2;\">✨ Class Reminder ✨</h2>\n\n  <p style=\"font-style: italic; color: #777;\">\n    “Success is the sum of small efforts, repeated day in and day out.” 💫\n  </p>\n\n  <p>Dear <b>Ms. {{$json[\"Faculty Name\"]}}</b>, 👋</p>\n\n  <p>Here are your class details for today:</p>\n\n  <ul style=\"list-style: none; padding-left: 0;\">\n    <li>🏫 <b>Branch:</b> {{$json[\"Branch\"]}}</li>\n    <li>🎓 <b>Class:</b> {{$json[\"Class\"]}}</li>\n    <li>📅 <b>Day:</b> {{$json[\"Day\"]}}</li>\n    <li>🏠 <b>Venue:</b> {{$json[\"Venue\"]}}</li>\n    <li>📘 <b>Subject:</b> {{$json[\"Subject\"]}}</li>\n    <li>🧑‍🏫 <b>Year:</b> {{$json[\"Year\"]}}</li>\n    <li>⏰ <b>Scheduled Time:</b> {{$json[\"SendTime\"]}}</li>\n  </ul>\n\n  <p>💌 <b>Message:</b> {{$json[\"Message\"]}}</p>\n\n  <br>\n\n  <p style=\"color: #4A90E2;\">Best regards,<br><b>Your Department 💼</b></p>\n\n</div>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        32
+      ],
+      "id": "40edbf82-69dd-4d62-bcaf-7a2a0fbc66f8",
+      "name": "Send a message",
+      "webhookId": "19791835-8f5f-4e60-aeef-8ef1142f378c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kipQVrk0AaKzDZPY",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Calculate sendTime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate sendTime": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "d8428692-52fd-4a3a-b60f-34ab248a4b2a",
+  "meta": {
+    "instanceId": "ecdaf31af396775b2aaae1459d2be77c4d56c7e90b3687e7962ff7ca200a08a3"
+  },
+  "id": "9f5hCk4tZdL9PlrJ",
+  "tags": []
+}
